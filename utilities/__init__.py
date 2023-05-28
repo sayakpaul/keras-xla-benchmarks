@@ -1,1 +1,1 @@
-from calculate_flops import get_flops
+from .calculate_flops import get_flops
