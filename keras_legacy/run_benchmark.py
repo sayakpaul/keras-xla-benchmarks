@@ -50,6 +50,7 @@ def main(args):
 
     for variant in all_model_variants:
         # Retrieve the current model variant.
+        print(f"Model variant: {variant}.")
         model = all_model_variants[variant]()
         assert isinstance(model, tf.keras.Model)
 
