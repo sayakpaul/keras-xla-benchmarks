@@ -2,7 +2,6 @@ import argparse
 import tensorflow as tf
 from model_mapping import MODEL_NAME_MAPPING
 import time
-import wandb
 from utilities import get_flops
 
 BATCH_SIZE = 4
@@ -35,6 +34,12 @@ def parse_args():
 
 
 def main(args):
+    if args.log_wandb:
+        try: 
+            import wandb 
+        except:
+            raise ImportError("wandb is not installed.")
+
     print(f"Running benchmark for {args.model_family}...")
     all_model_variants = MODEL_NAME_MAPPING.get(args.model_family)
     print(f"Total model variants: {len(all_model_variants)}.")
