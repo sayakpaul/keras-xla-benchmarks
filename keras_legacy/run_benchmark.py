@@ -96,7 +96,13 @@ def main(args):
         # Log to WandB if specified.
         if args.log_wandb:
             run_name = f"{variant}@xla-{args.xla}@res-{args.resolution}"
-            wandb.init(project="keras-xla-benchmarks", name=run_name, config=args)
+            wandb.init(
+                project="keras-xla-benchmarks",
+                name=run_name,
+                config=args,
+                job_type=f"benchmark/{args.model_family}",
+                tags=[args.model_family, f"resolution-{args.resolution}"],
+            )
             wandb.config.update(
                 {
                     "family": args.model_family,
