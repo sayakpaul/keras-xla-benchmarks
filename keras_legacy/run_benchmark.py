@@ -66,19 +66,22 @@ def main(args):
         # XLA compilation.
         print(f"Compiling with XLA: {args.xla}...")
         if args.xla:
-            model = tf.function(model, jit_compile=True)
+            model_xla = tf.function(model, jit_compile=True)
+
+        # Determine the variable to be benchmarked.
+        benchmark_var = model_xla if args.xla else model
 
         # Generate a batch of random inputs and warm the model up.
         print("Warming up the model...")
         random_inputs = tf.random.normal(input_spec_shape)
         for _ in range(WARMUP_ITERATIONS):
-            _ = model(random_inputs, training=False)
+            _ = benchmark_var(random_inputs, training=False)
 
         # Calculate throughput.
         print("Calculating throughput...")
         start_time = time.time()
         for _ in range(NUM_ITERATIONS):
-            _ = model(random_inputs, training=False)
+            _ = benchmark_var(random_inputs, training=False)
         end_time = time.time()
         total_time = end_time - start_time
         throughput = NUM_ITERATIONS * BATCH_SIZE / total_time
@@ -99,9 +102,9 @@ def main(args):
                     "Model family": args.model_family,
                     "Model variant": variant,
                     "XLA": args.xla,
-                    "Throughput (samples/sec)": f"{throughput:.2f}",
-                    "Num parameters (million)": f"{num_params:.2f}",
-                    "FLOPs (giga)": f"{flops:.2f}",
+                    "Throughput (samples/sec)": throughput,
+                    "Num parameters (million)": num_params,
+                    "FLOPs (giga)": flops,
                 }
             )
             wandb.finish()
