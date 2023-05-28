@@ -2,7 +2,7 @@ import argparse
 import tensorflow as tf
 from model_mapping import MODEL_NAME_MAPPING
 import time
-from utilities import get_flops
+from ..utilities import get_flops
 
 BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10
