@@ -93,7 +93,7 @@ def main(args):
         # Log to WandB if specified.
         if args.log_wandb:
             run_name = f"{variant}@xla-{args.xla}@res-{args.resolution}"
-            wandb.init(project="keras-xla-benchmarks", nam=run_name, config=args)
+            wandb.init(project="keras-xla-benchmarks", name=run_name, config=args)
             wandb.log(
                 {
                     "Model family": args.model_family,
