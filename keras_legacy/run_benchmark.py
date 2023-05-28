@@ -97,14 +97,18 @@ def main(args):
         if args.log_wandb:
             run_name = f"{variant}@xla-{args.xla}@res-{args.resolution}"
             wandb.init(project="keras-xla-benchmarks", name=run_name, config=args)
+            wandb.config.update(
+                {
+                    "family": args.model_family,
+                    "variant": variant,
+                    "resolution": args.resolution,
+                }
+            )
             wandb.log(
                 {
-                    "Model family": args.model_family,
-                    "Model variant": variant,
-                    "XLA": args.xla,
-                    "Throughput (samples/sec)": throughput,
-                    "Num parameters (million)": num_params,
-                    "FLOPs (giga)": flops,
+                    "Throughput (samples/sec)": float(f"{throughput:.2f}"),
+                    "Num parameters (million)": float(f"{num_params:.2f}"),
+                    "FLOPs (giga)": float(f"{flops:.2f}"),
                 }
             )
             wandb.finish()
