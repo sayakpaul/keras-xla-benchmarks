@@ -19,7 +19,6 @@ def parse_args():
     parser.add_argument(
         "--model_family",
         type=str,
-        default="ResNet_V1",
         required=True,
         choices=list(MODEL_NAME_MAPPING.keys()),
         help="Model family to benchmark.",
