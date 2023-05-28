@@ -86,7 +86,7 @@ def main(args):
 
         # Calculate FLOPs and number of parameters.
         num_params = model.count_params() / 1e6
-        flops = (get_flops(model, input_spec_shape) / 1e9) / BATCH_SIZE
+        flops = (get_flops(model, input_spec_shape)[0] / 1e9) / BATCH_SIZE
         print(f"Model parameters (million): {num_params:.2f}")
         print(f"FLOPs (giga): {flops:.2f}")
 
