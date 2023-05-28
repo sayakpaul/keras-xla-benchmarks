@@ -2,7 +2,12 @@ import argparse
 import tensorflow as tf
 from model_mapping import MODEL_NAME_MAPPING
 import time
-from ..utilities import get_flops
+
+
+import sys
+
+sys.path.append("..")
+from utilities.calculate_flops import get_flops
 
 BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10
@@ -35,9 +40,9 @@ def parse_args():
 
 def main(args):
     if args.log_wandb:
-        try: 
-            import wandb 
-        except:
+        try:
+            import wandb
+        except Exception:
             raise ImportError("wandb is not installed.")
 
     print(f"Running benchmark for {args.model_family}...")
