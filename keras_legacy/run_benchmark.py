@@ -41,7 +41,7 @@ def main(args):
 
     for variant in all_model_variants:
         # Retrieve the current model variant.
-        model = all_model_variants[variant]
+        model = all_model_variants[variant]()
         assert isinstance(model, tf.keras.Model)
 
         # Determine the input spec with which to run the benchmark.
