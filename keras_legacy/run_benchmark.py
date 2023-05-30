@@ -12,6 +12,7 @@ from utilities.calculate_flops import get_flops
 BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10
 NUM_ITERATIONS = 100
+NUM_CHANNELS = 3
 
 
 def parse_args():
@@ -55,8 +56,14 @@ def main(args):
         assert isinstance(model, tf.keras.Model)
 
         # Determine the input spec with which to run the benchmark.
-        input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
-        if args.resolution is None:
+        if args.resolution is not None:
+            input_spec_shape = [BATCH_SIZE] + [
+                args.resolution,
+                args.resolution,
+                NUM_CHANNELS,
+            ]
+        else:
+            input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
             args.resolution = input_spec_shape[1]
         if input_spec_shape[1] is None and args.resolution is None:
             raise ValueError(
