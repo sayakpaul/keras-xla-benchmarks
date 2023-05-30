@@ -102,6 +102,8 @@ def main(args):
 
         # Log to WandB if specified.
         if args.log_wandb:
+            # TODO: Append the device name:
+            # https://www.tensorflow.org/api_docs/python/tf/config/experimental/get_device_details
             run_name = f"{variant}@xla-{args.xla}@res-{args.resolution}"
             wandb.init(project="keras-xla-benchmarks", name=run_name, config=args)
             wandb.config.update(
