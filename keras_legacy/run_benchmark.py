@@ -7,7 +7,8 @@ import time
 import sys
 
 sys.path.append("..")
-from utilities.calculate_flops import get_flops
+from utilities import get_flops
+from utilities import get_device_name
 
 BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10
@@ -75,7 +76,7 @@ def main(args):
         if args.xla:
             model_xla = tf.function(model, jit_compile=True)
 
-        # Determine the variable to be benchmarked.
+        # Determine the variable with which the benchmark is to be performed.
         benchmark_var = model_xla if args.xla else model
 
         # Generate a batch of random inputs and warm the model up.
@@ -102,9 +103,10 @@ def main(args):
 
         # Log to WandB if specified.
         if args.log_wandb:
-            # TODO: Append the device name:
-            # https://www.tensorflow.org/api_docs/python/tf/config/experimental/get_device_details
-            run_name = f"{variant}@xla-{args.xla}@res-{args.resolution}"
+            device_name = get_device_name()
+            run_name = (
+                f"{variant}@xla-{args.xla}@res-{args.resolution}@device-{device_name}"
+            )
             wandb.init(project="keras-xla-benchmarks", name=run_name, config=args)
             wandb.config.update(
                 {
