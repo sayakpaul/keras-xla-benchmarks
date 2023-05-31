@@ -2,7 +2,7 @@ import argparse
 import tensorflow as tf
 from model_mapping import MODEL_NAME_MAPPING
 import time
-
+import warnings
 
 import sys
 
@@ -14,6 +14,7 @@ BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10
 NUM_ITERATIONS = 100
 NUM_CHANNELS = 3
+DEFAULT_RESOLUTION = 224
 
 
 def parse_args():
@@ -24,12 +25,6 @@ def parse_args():
         required=True,
         choices=list(MODEL_NAME_MAPPING.keys()),
         help="Model family to benchmark.",
-    )
-    parser.add_argument(
-        "--resolution",
-        type=int,
-        default=None,
-        help="Resolution to use for benchmarking when model input spec is not fully defined.",
     )
     parser.add_argument(
         "--xla", action="store_true", help="XLA-compile the model variants."
@@ -57,21 +52,17 @@ def main(args):
         assert isinstance(model, tf.keras.Model)
 
         # Determine the input spec with which to run the benchmark.
-        if args.resolution is not None:
-            print(f"Resolution: {args.resolution}")
+        input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
+        if input_spec_shape[1] is None:
+            warnings.warn(
+                f"Defaulting to {DEFAULT_RESOLUTION} resolution. "
+                "Change `DEFAULT_RESOLUTION` accordingly."
+            )
             input_spec_shape = [BATCH_SIZE] + [
-                args.resolution,
-                args.resolution,
+                DEFAULT_RESOLUTION,
+                DEFAULT_RESOLUTION,
                 NUM_CHANNELS,
             ]
-            print(f"input_spec_shape: {input_spec_shape}")
-        else:
-            input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
-            args.resolution = input_spec_shape[1]
-        if input_spec_shape[1] is None and args.resolution is None:
-            raise ValueError(
-                "When model input spec is not fully defined, one must specify a valid `resolution`."
-            )
 
         # XLA compilation.
         print(f"Compiling with XLA: {args.xla}...")
@@ -106,15 +97,13 @@ def main(args):
         # Log to WandB if specified.
         if args.log_wandb:
             device_name = get_device_name()
-            run_name = (
-                f"{variant}@xla-{args.xla}@res-{args.resolution}@device-{device_name}"
-            )
+            run_name = f"{variant}@xla-{args.xla}@res-{input_spec_shape[1]}@device-{device_name}"
             wandb.init(project="keras-xla-benchmarks", name=run_name, config=args)
             wandb.config.update(
                 {
                     "family": args.model_family,
                     "variant": variant,
-                    "resolution": args.resolution,
+                    "resolution": input_spec_shape[1],
                 }
             )
             wandb.log(
@@ -125,8 +114,6 @@ def main(args):
                 }
             )
             wandb.finish()
-        
-        del args
 
 
 if __name__ == "__main__":
