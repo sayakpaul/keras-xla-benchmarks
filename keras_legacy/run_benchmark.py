@@ -124,8 +124,9 @@ def main(args):
                     "FLOPs (giga)": float(f"{flops:.2f}"),
                 }
             )
-            del args
             wandb.finish()
+        
+        del args
 
 
 if __name__ == "__main__":
