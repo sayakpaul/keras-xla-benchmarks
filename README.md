@@ -3,12 +3,19 @@ Presents comprehensive benchmarks of XLA-compatible pre-trained models in Keras.
 
 ## Dev environment
 
-Benchmark results can vary a lot from platform. So, it's important ensure a consistent development platform. For the dev environment, we use the following Docker container: `tensorflow/tensorflow:latest-gpu` ([reference](https://www.tensorflow.org/install/docker)). 
+Benchmark results can vary a lot from platform. So, it's important ensure a consistent development platform. For the dev environment, we use the following Docker container:  `spsayakpaul/keras-xla-benchmarks`, built on top of  `tensorflow/tensorflow:latest-gpu` ([reference](https://www.tensorflow.org/install/docker)). 
 
 To run the Docker container:
 
 ```bash
-nvidia-docker run -it --rm --shm-size=16g --ulimit memlock=-1 tensorflow/tensorflow:latest-gpu
+nvidia-docker run -it --rm --shm-size=16g --ulimit memlock=-1 spsayakpaul/keras-xla-benchmarks
+```
+
+The Docker container was built like so:
+
+```bash
+docker build -t spsayakpaul/keras-xla-benchmarks .
+docker push spsayakpaul/keras-xla-benchmarks
 ```
 
 ## Keep in mind 💡
