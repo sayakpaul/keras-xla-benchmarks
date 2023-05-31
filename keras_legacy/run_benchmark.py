@@ -58,11 +58,13 @@ def main(args):
 
         # Determine the input spec with which to run the benchmark.
         if args.resolution is not None:
+            print(f"Resolution: {args.resolution}")
             input_spec_shape = [BATCH_SIZE] + [
                 args.resolution,
                 args.resolution,
                 NUM_CHANNELS,
             ]
+            print(f"input_spec_shape: {input_spec_shape}")
         else:
             input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
             args.resolution = input_spec_shape[1]
