@@ -1,7 +1,6 @@
 import tensorflow as tf
-from tensorflow.python.framework.convert_to_constants import (
-    convert_variables_to_constants_v2_as_graph,
-)
+from tensorflow.python.framework.convert_to_constants import \
+    convert_variables_to_constants_v2_as_graph
 
 
 def get_flops(model, input_shape=(4, 224, 224, 3)):

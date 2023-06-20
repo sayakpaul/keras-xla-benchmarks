@@ -1,5 +1,6 @@
-from model_mapping import MODEL_NAME_MAPPING
 import subprocess
+
+from model_mapping import MODEL_NAME_MAPPING
 
 
 def main():

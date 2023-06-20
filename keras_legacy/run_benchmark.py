@@ -3,15 +3,13 @@ import tensorflow as tf
 tf.keras.backend.clear_session()
 
 import argparse
-
-from model_mapping import MODEL_NAME_MAPPING
+import sys
 import time
 
-import sys
+from model_mapping import MODEL_NAME_MAPPING
 
 sys.path.append("..")
-from utilities import get_flops
-from utilities import get_device_name
+from utilities import get_device_name, get_flops
 
 BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10

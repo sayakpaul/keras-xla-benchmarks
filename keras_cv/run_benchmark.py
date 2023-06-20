@@ -59,7 +59,9 @@ def main(args):
     # Retrieve the current model variant.
     print(f"Running benchmark for {args.model_variant}...")
     all_model_variants = MODEL_NAME_MAPPING.get(args.model_family)
-    model = all_model_variants[args.model_variant].from_preset(args.model_variant)
+    model = all_model_variants[args.model_variant].from_preset(
+        args.model_variant, bounding_box_format="xywh"
+    )
     assert isinstance(model, tf.keras.Model)
 
     # Determine the input spec with which to run the benchmark.
