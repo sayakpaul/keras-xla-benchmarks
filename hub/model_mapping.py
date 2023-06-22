@@ -1,10 +1,10 @@
 MODEL_NAME_MAPPING = {
     "ViT": {
-        "vit_s16": ("https://tfhub.dev/sayakpaul/vit_s16_classification/1", "4.251"),
-        "vit_b8": ("https://tfhub.dev/sayakpaul/vit_b8_classification/1", "66.865"),
-        "vit_b16": ("https://tfhub.dev/sayakpaul/vit_b16_classification/1", "16.867"),
-        "vit_b32": ("https://tfhub.dev/sayakpaul/vit_b32_classification/1", "4.368"),
-        "vit_l16": ("https://tfhub.dev/sayakpaul/vit_l16_classification/1", "59.697"),
+        "vit_s16": ("https://tfhub.dev/sayakpaul/vit_s16_classification/1", 4.251),
+        "vit_b8": ("https://tfhub.dev/sayakpaul/vit_b8_classification/1", 66.865),
+        "vit_b16": ("https://tfhub.dev/sayakpaul/vit_b16_classification/1", 16.867),
+        "vit_b32": ("https://tfhub.dev/sayakpaul/vit_b32_classification/1", 4.368),
+        "vit_l16": ("https://tfhub.dev/sayakpaul/vit_l16_classification/1", 59.697),
         "vit_r26_s32": (
             "https://tfhub.dev/sayakpaul/vit_r26_s32_lightaug_classification/1",
             "3.536",
@@ -38,15 +38,15 @@ MODEL_NAME_MAPPING = {
     "MLP-Mixer": {
         "mixer_b16": (
             "https://tfhub.dev/sayakpaul/mixer_b16_sam_classification/1",
-            "12.621",
+            12.621,
         ),
         "mixer_b32": (
             "https://tfhub.dev/sayakpaul/mixer_b32_sam_classification/1",
-            "3.242",
+            3.242,
         ),
         "mixer_l16": (
             "https://tfhub.dev/sayakpaul/mixer_l16_i1k_classification/1",
-            "44.597",
+            44.597,
         ),
     },
 }
