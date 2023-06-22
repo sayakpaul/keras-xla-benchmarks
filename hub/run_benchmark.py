@@ -60,8 +60,6 @@ def main(args):
     print(f"Running benchmark for {args.model_variant}...")
     all_model_variants = MODEL_NAME_MAPPING.get(args.model_family)
     model_url = all_model_variants[args.model_variant]
-    model = get_model_from_hub(model_url)
-    assert isinstance(model, tf.keras.Model)
 
     # Determine the input spec with which to run the benchmark.
     if "deit" in model_url:
@@ -69,6 +67,10 @@ def main(args):
         assert args.resolution is not None
     if args.resolution is not None:
         input_spec_shape = [BATCH_SIZE] + [args.resolution, args.resolution, 3]
+
+    # Initialize the model.
+    model = get_model_from_hub(model_url, args.resolution)
+    assert isinstance(model, tf.keras.Model)
 
     # XLA compilation.
     print(f"Compiling with XLA: {args.xla}...")
