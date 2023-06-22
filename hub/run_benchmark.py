@@ -59,7 +59,10 @@ def main(args):
     # Retrieve the current model variant.
     print(f"Running benchmark for {args.model_variant}...")
     all_model_variants = MODEL_NAME_MAPPING.get(args.model_family)
-    model_url = all_model_variants[args.model_variant]
+    if "deit" in args.model_variant or "swin" in args.model_variant:
+        model_url = all_model_variants[args.model_variant]
+    else:
+        model_url, flops = all_model_variants[args.model_variant]
 
     # Determine the input spec with which to run the benchmark.
     if "deit" in model_url:
@@ -98,7 +101,8 @@ def main(args):
 
     # Calculate FLOPs and number of parameters.
     num_params = model.count_params() / 1e6
-    flops = (get_flops(model, input_spec_shape)[0] / 1e9) / BATCH_SIZE
+    if "deit" in args.model_variant or "swin" in args.model_variant:
+        flops = (get_flops(model, input_spec_shape)[0] / 1e9) / BATCH_SIZE
     print(f"Model parameters (million): {num_params:.2f}")
     print(f"FLOPs (giga): {flops:.2f}")
 
