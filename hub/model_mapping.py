@@ -7,11 +7,11 @@ MODEL_NAME_MAPPING = {
         "vit_l16": ("https://tfhub.dev/sayakpaul/vit_l16_classification/1", 59.697),
         "vit_r26_s32": (
             "https://tfhub.dev/sayakpaul/vit_r26_s32_lightaug_classification/1",
-            "3.536",
+            3.536,
         ),
         "vit_r50_l32": (
             "https://tfhub.dev/sayakpaul/vit_r50_l32_classification/1",
-            "19.452",
+            19.452,
         ),
     },
     "DeiT": {
