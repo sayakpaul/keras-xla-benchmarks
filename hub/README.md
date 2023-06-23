@@ -1,3 +1,18 @@
+## Running the benchmarks
+
+We leverage TensorFlow Hub to benchmark the following models:
+
+* [ViT](https://arxiv.org/abs/2010.11929)
+* [DeiT](https://arxiv.org/abs/2012.12877)
+* [Swin](https://arxiv.org/abs/2103.14030)
+* [MLP-Mixer](https://arxiv.org/abs/2105.01601)
+
+You can launch benchmarks in bulk by running `python run_all_benchmarks.py`. To run
+a benchmark individually, run `python run_benchmark.py`. If you do `python run_benchmark.py -h`, you will be able to see the CLI arguments supported by the script.
+
+
+## FLOPs
+
 FLOPs count for the ViT and MLP-Mixer models were derived with `timm` and `fvcore` using the following code:
 
 ```python
