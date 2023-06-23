@@ -11,7 +11,10 @@ def get_model_from_hub(url: str, input_resolution: int):
     if "vit" not in url and "mixer" not in url:
         inputs = tf.keras.Input((input_resolution, input_resolution, 3))
         hub_module = hub.KerasLayer(url)
-        outputs, _ = hub_module(inputs)
+        if "swin" in url:
+            outputs = hub_module(inputs)
+        else:
+            outputs, _ = hub_module(inputs)
         return tf.keras.Model(inputs, outputs)
     else:
         return tf.keras.Sequential([hub.KerasLayer(url)])
