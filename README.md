@@ -9,8 +9,11 @@ different GPU devices to provide a holistic overview of the possible gains from 
 * Learn more about XLA from [here](https://www.tensorflow.org/xla).
 * You can explore the benchmark results here and interact with them:
 [sayakpaul/keras-xla-benchmarks](https://wandb.ai/sayakpaul/keras-xla-benchmarks). 
-* The main CSV file of the benchmark files is available here:
+* The main CSV file collected from the benchmark is available here:
 [https://huggingface.co/datasets/sayakpaul/sample-datasets/blob/main/keras_xla_benchmarks.csv](https://huggingface.co/datasets/sayakpaul/sample-datasets/blob/main/keras_xla_benchmarks.csv).
+* A [presentation](https://docs.google.com/presentation/d/1HbzkdLnT36H3zFTlActwSj6LnH6yegAS0xywStuhqnI/edit?usp=sharing) on XLA.
+* A [blog post](https://blog.tensorflow.org/2022/11/how-hugging-face-improved-text-generation-performance-with-xla.html) on how Hugging Face used XLA to speed up the inference latency
+of its text generation models in `transformers`.
 
 ## Model pool 🏊‍♂️
 
