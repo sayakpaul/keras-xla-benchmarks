@@ -12,8 +12,7 @@ different GPU devices to provide a holistic overview of the possible gains from 
 * The main CSV file collected from the benchmark is available here:
 [https://huggingface.co/datasets/sayakpaul/sample-datasets/blob/main/keras_xla_benchmarks.csv](https://huggingface.co/datasets/sayakpaul/sample-datasets/blob/main/keras_xla_benchmarks.csv).
 * A [presentation](https://docs.google.com/presentation/d/1HbzkdLnT36H3zFTlActwSj6LnH6yegAS0xywStuhqnI/edit?usp=sharing) on XLA.
-* A [blog post](https://blog.tensorflow.org/2022/11/how-hugging-face-improved-text-generation-performance-with-xla.html) on how Hugging Face used XLA to speed up the inference latency
-of its text generation models in `transformers`.
+* A [blog post](https://blog.tensorflow.org/2022/11/how-hugging-face-improved-text-generation-performance-with-xla.html) on how Hugging Face used XLA to speed up the inference latency of its text generation models in 🤗 Transformers.
 
 ## Model pool 🏊‍♂️
 
@@ -71,15 +70,145 @@ docker push spsayakpaul/keras-xla-benchmarks
 
 Each folder (`keras_legacy`, `keras_cv`, or `hub`) contains a Jupyter Notebook called `analysis.ipynb` that provides some exploratory analysis on the results. The `compare.ipynb` notebook presents some basic analysis as well. 
 
+**Note** that for this project, we solely focus on benchmarking the throughput of the models and NOT on their predictive quality. 
+
 Below are some findings I found interesting. 
 
 ### Across different GPUs, how fast are the model variants with XLA from `keras.applications`?
 
+<div align="center">
+<table>
+  <tr>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/a100_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/v100_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/t4_224_True.png" width=500/></td>
+  </tr>
+</table>
+<sub><b>Caption</b>: Throughput (samples/sec) of the top-10 model variants with XLA across different GPUs. Different GPUs seem to have different top performing models (throughput-wise). </sub> 
+</div>
+
 
 ### Resolution-wise distribution of the throughputs obtained by different model variants in `keras.applications`
 
+|    | model_family    | model_variant   |   resolution | xla   | accelerator   |   flop (giga) |   params (million) |   throughput (samples/sec) |
+|---:|:----------------|:----------------|-------------:|:------|:--------------|--------------:|-------------------:|---------------------------:|
+|  0 | MobileNet_V1    | mobilenet_v1    |          224 | True  | v100          |          0.57 |               4.25 |                    2842.09 |
+|  1 | EfficientNet_V2 | efficient_b1_v2 |          240 | True  | v100          |          1.21 |               8.21 |                     866.32 |
+|  2 | EfficientNet_V2 | efficient_b2_v2 |          260 | True  | v100          |          1.71 |              10.18 |                     738.15 |
+|  3 | Xception        | xception        |          299 | True  | a100          |          8.36 |              22.91 |                     793.82 |
+|  4 | EfficientNet_V1 | efficient_b3    |          300 | True  | a100          |          1.86 |              12.32 |                     578.09 |
+|  5 | NASNet          | nasnet_large    |          331 | True  | a100          |         23.84 |              88.95 |                     149.77 |
+|  6 | EfficientNet_V1 | efficient_b4    |          380 | True  | a100          |          4.46 |              19.47 |                     463.45 |
+|  7 | EfficientNet_V2 | efficient_s_v2  |          384 | True  | a100          |          8.41 |              21.61 |                     474.41 |
+|  8 | EfficientNet_V1 | efficient_b5    |          456 | True  | a100          |         10.4  |              30.56 |                     268.44 |
+|  9 | EfficientNet_V2 | efficient_m_v2  |          480 | True  | a100          |         24.69 |              54.43 |                     238.62 |
+| 10 | EfficientNet_V1 | efficient_b6    |          528 | True  | a100          |         19.29 |              43.27 |                     162.92 |
+| 11 | EfficientNet_V1 | efficient_b7    |          600 | True  | a100          |         38.13 |              66.66 |                     107.52 |
+
+💡 It seems like as we increase the resolution from 260, A100 tops the charts.
 
 ### What about the same but also grouped w.r.t the GPU being used? 
+
+|    | model_family    | model_variant   |   resolution | xla   | accelerator   |   flop (giga) |   params (million) |   throughput (samples/sec) |
+|---:|:----------------|:----------------|-------------:|:------|:--------------|--------------:|-------------------:|---------------------------:|
+|  0 | MobileNet_V1    | mobilenet_v1    |          224 | True  | a100          |          0.57 |               4.25 |                    2608.05 |
+|  1 | RegNet_X        | regnetx_016     |          224 | True  | t4            |          0.1  |               2.71 |                    1921.77 |
+|  2 | MobileNet_V1    | mobilenet_v1    |          224 | True  | v100          |          0.57 |               4.25 |                    2842.09 |
+|  3 | EfficientNet_V1 | efficient_b1    |          240 | True  | a100          |          0.7  |               7.86 |                     710.85 |
+|  4 | EfficientNet_V2 | efficient_b1_v2 |          240 | True  | t4            |          1.21 |               8.21 |                     477.9  |
+|  5 | EfficientNet_V2 | efficient_b1_v2 |          240 | True  | v100          |          1.21 |               8.21 |                     866.32 |
+|  6 | EfficientNet_V1 | efficient_b2    |          260 | True  | a100          |          1.01 |               9.18 |                     662.06 |
+|  7 | EfficientNet_V2 | efficient_b2_v2 |          260 | True  | t4            |          1.71 |              10.18 |                     438.91 |
+|  8 | EfficientNet_V2 | efficient_b2_v2 |          260 | True  | v100          |          1.71 |              10.18 |                     738.15 |
+|  9 | Xception        | xception        |          299 | True  | a100          |          8.36 |              22.91 |                     793.82 |
+| 10 | Inception       | inception_v3    |          299 | True  | t4            |          5.73 |              23.85 |                     224.77 |
+| 11 | Xception        | xception        |          299 | True  | v100          |          8.36 |              22.91 |                     467.52 |
+| 12 | EfficientNet_V1 | efficient_b3    |          300 | True  | a100          |          1.86 |              12.32 |                     578.09 |
+| 13 | EfficientNet_V2 | efficient_b3_v2 |          300 | True  | t4            |          3.03 |              14.47 |                     283.02 |
+| 14 | EfficientNet_V2 | efficient_b3_v2 |          300 | True  | v100          |          3.03 |              14.47 |                     515.21 |
+| 15 | NASNet          | nasnet_large    |          331 | True  | a100          |         23.84 |              88.95 |                     149.77 |
+| 16 | NASNet          | nasnet_large    |          331 | True  | t4            |         23.84 |              88.95 |                      42.37 |
+| 17 | NASNet          | nasnet_large    |          331 | True  | v100          |         23.84 |              88.95 |                     104.47 |
+| 18 | EfficientNet_V1 | efficient_b4    |          380 | True  | a100          |          4.46 |              19.47 |                     463.45 |
+| 19 | EfficientNet_V1 | efficient_b4    |          380 | True  | t4            |          4.46 |              19.47 |                     131.74 |
+| 20 | EfficientNet_V1 | efficient_b4    |          380 | True  | v100          |          4.46 |              19.47 |                     310.74 |
+| 21 | EfficientNet_V2 | efficient_s_v2  |          384 | True  | a100          |          8.41 |              21.61 |                     474.41 |
+| 22 | EfficientNet_V2 | efficient_s_v2  |          384 | True  | t4            |          8.41 |              21.61 |                     141.84 |
+| 23 | EfficientNet_V2 | efficient_s_v2  |          384 | True  | v100          |          8.41 |              21.61 |                     323.35 |
+| 24 | EfficientNet_V1 | efficient_b5    |          456 | True  | a100          |         10.4  |              30.56 |                     268.44 |
+| 25 | EfficientNet_V1 | efficient_b5    |          456 | True  | t4            |         10.4  |              30.56 |                      47.08 |
+| 26 | EfficientNet_V1 | efficient_b5    |          456 | True  | v100          |         10.4  |              30.56 |                     173.51 |
+| 27 | EfficientNet_V2 | efficient_m_v2  |          480 | True  | a100          |         24.69 |              54.43 |                     238.62 |
+| 28 | EfficientNet_V2 | efficient_m_v2  |          480 | True  | t4            |         24.69 |              54.43 |                      49.26 |
+| 29 | EfficientNet_V2 | efficient_m_v2  |          480 | True  | v100          |         24.69 |              54.43 |                     133.36 |
+| 30 | EfficientNet_V1 | efficient_b6    |          528 | True  | a100          |         19.29 |              43.27 |                     162.92 |
+| 31 | EfficientNet_V1 | efficient_b6    |          528 | True  | t4            |         19.29 |              43.27 |                      36.88 |
+| 32 | EfficientNet_V1 | efficient_b6    |          528 | True  | v100          |         19.29 |              43.27 |                     104.09 |
+| 33 | EfficientNet_V1 | efficient_b7    |          600 | True  | a100          |         38.13 |              66.66 |                     107.52 |
+| 34 | EfficientNet_V1 | efficient_b7    |          600 | True  | t4            |         38.13 |              66.66 |                      20.85 |
+| 35 | EfficientNet_V1 | efficient_b7    |          600 | True  | v100          |         38.13 |              66.66 |                      63.23 |
+
+### Which model family (from `keras.applications`) has the highest amount of absolute speedup from XLA for a particular resolution (say 224) and accelerator (say A100)?
+
+|    | model_family    | model_variant   |   speedup |
+|---:|:----------------|:----------------|----------:|
+|  0 | MobileNet_V1    | mobilenet_v1    |   2543.92 |
+|  1 | RegNet_X        | regnetx_016     |   1933.78 |
+|  2 | MobileNet_V2    | mobilenet_v2    |   1668.39 |
+|  3 | RegNet_Y        | regnety_002     |   1216.29 |
+|  4 | VGG             | vgg16           |   1209.08 |
+|  5 | ConvNeXt        | convnext_tiny   |   1134.46 |
+|  6 | EfficientNet_V1 | efficient_b0    |    893.08 |
+|  7 | ResNetRS        | resnetrs_50     |    787.59 |
+|  8 | EfficientNet_V2 | efficient_b0_v2 |    780    |
+|  9 | DenseNet        | densenet_121    |    700.73 |
+| 10 | ResNet_V1       | resnet50_v1     |    671.24 |
+| 11 | ResNet_V2       | resnet101_v2    |    569.12 |
+| 12 | NASNet          | nasnet_mobile   |    423.78 |
+
+### What about the relative speedup in percentages?
+
+|    | model_family    | model_variant   |   speedup_percentage |
+|---:|:----------------|:----------------|---------------------:|
+|  0 | RegNet_X        | regnetx_016     |             4452.64  |
+|  1 | NASNet          | nasnet_mobile   |             4368.87  |
+|  2 | ConvNeXt        | convnext_small  |             4188.45  |
+|  3 | MobileNet_V1    | mobilenet_v1    |             3966.82  |
+|  4 | DenseNet        | densenet_121    |             3686.11  |
+|  5 | RegNet_Y        | regnety_004     |             3427.97  |
+|  6 | ResNetRS        | resnetrs_350    |             3300.45  |
+|  7 | MobileNet_V2    | mobilenet_v2    |             2964.45  |
+|  8 | ResNet_V2       | resnet101_v2    |             2844.18  |
+|  9 | EfficientNet_V1 | efficient_b0    |             2841.49  |
+| 10 | EfficientNet_V2 | efficient_b0_v2 |             2761.06  |
+| 11 | ResNet_V1       | resnet152_v1    |             1639.69  |
+| 12 | VGG             | vgg16           |              396.472 |
+
+💡 Some whopping speedup (**4452.64%**) right there 🤯
+
+### How do these models fair to non-CNN models such as Swin, ViT, DeiT, and MLP-Mixer?
+
+|    | model_family    | model_variant                    |   speedup_percentage |
+|---:|:----------------|:---------------------------------|---------------------:|
+|  0 | RegNet_X        | regnetx_016                      |           4452.64    |
+|  1 | NASNet          | nasnet_mobile                    |           4368.87    |
+|  2 | ConvNeXt        | convnext_small                   |           4188.45    |
+|  3 | MobileNet_V1    | mobilenet_v1                     |           3966.82    |
+|  4 | DenseNet        | densenet_121                     |           3686.11    |
+|  5 | RegNet_Y        | regnety_004                      |           3427.97    |
+|  6 | ResNetRS        | resnetrs_350                     |           3300.45    |
+|  7 | MobileNet_V2    | mobilenet_v2                     |           2964.45    |
+|  8 | ResNet_V2       | resnet101_v2                     |           2844.18    |
+|  9 | EfficientNet_V1 | efficient_b0                     |           2841.49    |
+| 10 | EfficientNet_V2 | efficient_b0_v2                  |           2761.06    |
+| 11 | ResNet_V1       | resnet152_v1                     |           1639.69    |
+| 12 | Swin            | swin_s3_small_224                |           1382.65    |
+| 13 | DeiT            | deit_small_distilled_patch16_224 |            525.086   |
+| 14 | VGG             | vgg16                            |            396.472   |
+| 15 | MLP-Mixer       | mixer_b32                        |             75.1291  |
+| 16 | ViT             | vit_b16                          |              5.69305 |
+
+💡 Seems like the non-CNN models don't benefit as much in comparison to the CNN ones.
 
 ## Keep in mind 💡
 
