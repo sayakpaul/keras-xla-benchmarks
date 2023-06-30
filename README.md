@@ -4,7 +4,13 @@ pre-trained computer vision models shipped by `keras.applications`, `keras_cv.mo
 and TensorFlow Hub. Benchmarks were conducted across different image resolutions and
 different GPU devices to provide a holistic overview of the possible gains from XLA.
 
-Learn more about XLA from [here](https://www.tensorflow.org/xla).
+## Useful links 🌐
+
+* Learn more about XLA from [here](https://www.tensorflow.org/xla).
+* You can explore the benchmark results here and interact with them:
+[sayakpaul/keras-xla-benchmarks](https://wandb.ai/sayakpaul/keras-xla-benchmarks). 
+* The main CSV file of the benchmark files is available here:
+[https://huggingface.co/datasets/sayakpaul/sample-datasets/blob/main/keras_xla_benchmarks.csv](https://huggingface.co/datasets/sayakpaul/sample-datasets/blob/main/keras_xla_benchmarks.csv).
 
 ## Model pool 🏊‍♂️
 
@@ -60,9 +66,17 @@ docker push spsayakpaul/keras-xla-benchmarks
 
 ## Findings from the benchmark 🕵️‍♂️
 
-Each folder (`keras_legacy`, `keras_cv`, or `hub`) contains a Jupyter Notebook called `analysis.ipynb` that provides some exploratory analysis on the results.
+Each folder (`keras_legacy`, `keras_cv`, or `hub`) contains a Jupyter Notebook called `analysis.ipynb` that provides some exploratory analysis on the results. The `compare.ipynb` notebook presents some basic analysis as well. 
 
-TBA
+Below are some findings I found interesting. 
+
+### Across different GPUs, how fast are the model variants with XLA from `keras.applications`?
+
+
+### Resolution-wise distribution of the throughputs obtained by different model variants in `keras.applications`
+
+
+### What about the same but also grouped w.r.t the GPU being used? 
 
 ## Keep in mind 💡
 
