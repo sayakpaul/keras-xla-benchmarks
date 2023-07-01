@@ -86,7 +86,7 @@ Below are some findings I found interesting.
   </tr>
 </table>
 <sub><b>Caption</b>: Throughput (samples/sec) of the top-10 models with XLA across different GPUs. Different GPUs seem to have different top performing models (throughput-wise). The volume of the dots in the plots was determined by the number of parameters each model contains.</sub> 
-</div>
+</div><br>
 
 💡 One particularly interesting finding here is that models having more FLOPs or more number of parameters aren't always slower than the ones having less FLOPs or less number of parameters. Take the plot corresponding to A100, for example. We notice that VGG16, despite having more FLOPs and more number of parameters, is faster than say, ConvNeXt Tiny. This finding is in line with [The Efficiency Misnomer](https://arxiv.org/abs/2110.12894).
 
@@ -227,7 +227,7 @@ Below are some findings I found interesting.
   </tr>
 </table>
 <sub><b>Caption</b>: Throughput (samples/sec) of the top-10 non-CNN models with XLA across different GPUs. Different GPUs seem to have different top performing models (throughput-wise). The volume of the dots in the plots was determined by the number of parameters each model contains.</sub> 
-</div>
+</div><br>
 
 💡 Here also the similar finding holds as the one presented after Table 1. Mixer-B32, despite being much larger than many models, is faster.
 
