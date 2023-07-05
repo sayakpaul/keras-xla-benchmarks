@@ -15,6 +15,7 @@ BATCH_SIZE = 4
 WARMUP_ITERATIONS = 10
 NUM_ITERATIONS = 100
 NUM_CHANNELS = 3
+DEFAULT_RESOLUTION = 224
 
 
 def parse_args():
@@ -65,10 +66,13 @@ def main(args):
     # Determine the input spec with which to run the benchmark.
     if args.resolution is None:
         input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
+        if input_spec_shape[1] is None:
+            input_spec_shape = [BATCH_SIZE] + [DEFAULT_RESOLUTION, DEFAULT_RESOLUTION, NUM_CHANNELS]
         args.resolution = input_spec_shape[1]
     elif args.resolution is not None:
-        input_spec_shape = [BATCH_SIZE] + [args.resolution, args.resolution, 3]
-    elif input_spec_shape[1] is None and args.resolution is None:
+        input_spec_shape = [BATCH_SIZE] + [args.resolution, args.resolution, NUM_CHANNELS]
+    
+    if input_spec_shape[1] is None and args.resolution is None:
         raise ValueError(
             "When model input spec is not available, you must provide `resolution`."
         )
