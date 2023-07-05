@@ -67,11 +67,19 @@ def main(args):
     if args.resolution is None:
         input_spec_shape = [BATCH_SIZE] + model.inputs[0].shape[1:]
         if input_spec_shape[1] is None:
-            input_spec_shape = [BATCH_SIZE] + [DEFAULT_RESOLUTION, DEFAULT_RESOLUTION, NUM_CHANNELS]
+            input_spec_shape = [BATCH_SIZE] + [
+                DEFAULT_RESOLUTION,
+                DEFAULT_RESOLUTION,
+                NUM_CHANNELS,
+            ]
         args.resolution = input_spec_shape[1]
     elif args.resolution is not None:
-        input_spec_shape = [BATCH_SIZE] + [args.resolution, args.resolution, NUM_CHANNELS]
-    
+        input_spec_shape = [BATCH_SIZE] + [
+            args.resolution,
+            args.resolution,
+            NUM_CHANNELS,
+        ]
+
     if input_spec_shape[1] is None and args.resolution is None:
         raise ValueError(
             "When model input spec is not available, you must provide `resolution`."
