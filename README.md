@@ -80,9 +80,9 @@ Below are some findings I found interesting.
 <div align="center">
 <table>
   <tr>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/a100_224_True.png" width=500/></td>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/v100_224_True.png" width=500/></td>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/t4_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/keras_legacy/a100_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/keras_legacy/v100_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/keras_legacy/t4_224_True.png" width=500/></td>
   </tr>
 </table>
 <sub><b>Caption</b>: Throughput (samples/sec) of the top-10 models with XLA across different GPUs. Different GPUs seem to have different top performing models (throughput-wise). The volume of the dots in the plots was determined by the number of parameters each model contains.</sub> 
@@ -93,9 +93,9 @@ Below are some findings I found interesting.
 <div align="center">
 <table>
   <tr>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/a100_mobilenet.png" width=500/></td>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/v100_mobilenet.png" width=500/></td>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/t4_mobilenet.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/mobilenet/a100_mobilenet.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/mobilenet/v100_mobilenet.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/mobilenet/t4_mobilenet.png" width=500/></td>
   </tr>
 </table>
 <sub><b>Caption</b>: MobileNet-V3 Small, despite being a much smaller model than MobileNet-V1, is much slower than it when XLA is enabled.</sub> 
@@ -234,15 +234,17 @@ Below are some findings I found interesting.
 <div align="center">
 <table>
   <tr>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/non_cnn/a100_224_True.png" width=500/></td>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/non_cnn/v100_224_True.png" width=500/></td>
-    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/non_cnn/t4_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/non_cnn/a100_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/non_cnn/v100_224_True.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/resolve/main/non_cnn/t4_224_True.png" width=500/></td>
   </tr>
 </table>
 <sub><b>Caption</b>: Throughput (samples/sec) of the top-10 non-CNN models with XLA across different GPUs. Different GPUs seem to have different top performing models (throughput-wise). The volume of the dots in the plots was determined by the number of parameters each model contains.</sub> 
 </div><br>
 
-💡 Here also the similar finding holds as the one presented after Table 1. Mixer-B32, despite being much larger than many models, is faster.
+💡 Here also the similar finding holds as the one presented after Table 1. Mixer-B32, despite being much larger than many models, is faster than the other variants.
+
+> 💡 For numbers on detection models like RetinaNet and YOLOV8, please refer to `keras_cv/analysis.ipynb`.
 
 ## Keep in mind 💡
 
