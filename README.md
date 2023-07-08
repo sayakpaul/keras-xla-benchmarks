@@ -71,7 +71,7 @@ docker push spsayakpaul/keras-xla-benchmarks
 
 Each folder (`keras_legacy`, `keras_cv`, or `hub`) contains a Jupyter Notebook called `analysis.ipynb` that provides some exploratory analysis on the results. The `compare.ipynb` notebook presents some basic analysis as well. 
 
-> 💡 **Note**: that for this project, we solely focus on benchmarking the throughput of the models and NOT on their predictive quality. 
+> 💡 **Note**: that for this project, we solely focus on benchmarking the throughput of the models and NOT on their predictive quality. The benchmarks were conducted using full precision (FP32) and NOT in mixed-precision.
 
 Below are some findings I found interesting. 
 
@@ -88,7 +88,18 @@ Below are some findings I found interesting.
 <sub><b>Caption</b>: Throughput (samples/sec) of the top-10 models with XLA across different GPUs. Different GPUs seem to have different top performing models (throughput-wise). The volume of the dots in the plots was determined by the number of parameters each model contains.</sub> 
 </div><br>
 
-💡 One particularly interesting finding here is that models having more FLOPs or more number of parameters aren't always slower than the ones having less FLOPs or less number of parameters. Take the plot corresponding to A100, for example. We notice that VGG16, despite having more FLOPs and more number of parameters, is faster than say, ConvNeXt Tiny. This finding is in line with [The Efficiency Misnomer](https://arxiv.org/abs/2110.12894).
+💡 One particularly interesting finding here is that models having more FLOPs or more number of parameters aren't always slower than the ones having less FLOPs or less number of parameters. Take the plot corresponding to A100, for example. We notice that VGG16, despite having more FLOPs and more number of parameters, is faster than say, ConvNeXt Tiny. This finding is in line with [The Efficiency Misnomer](https://arxiv.org/abs/2110.12894). Here's another figure further presenting evidence that larger models are always not slower than the smaller ones:
+
+<div align="center">
+<table>
+  <tr>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/a100_mobilenet.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/v100_mobilenet.png" width=500/></td>
+    <td><img src="https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/t4_mobilenet.png" width=500/></td>
+  </tr>
+</table>
+<sub><b>Caption</b>: MobileNet-V3 Small, despite being a much smaller model than MobileNet-V1, is much slower than it when XLA is enabled.</sub> 
+</div><br>
 
 ### Resolution-wise distribution of the throughputs obtained by different models in `keras.applications` with XLA
 
@@ -154,41 +165,43 @@ Below are some findings I found interesting.
 
 ### Which model family (from `keras.applications`) has the highest amount of absolute speedup from XLA for a particular resolution (say 224) and accelerator (say A100)?
 
-|    | model_family    | model_variant   |   speedup |
-|---:|:----------------|:----------------|----------:|
-|  0 | MobileNet_V1    | mobilenet_v1    |   2543.92 |
-|  1 | RegNet_X        | regnetx_016     |   1933.78 |
-|  2 | MobileNet_V2    | mobilenet_v2    |   1668.39 |
-|  3 | RegNet_Y        | regnety_002     |   1216.29 |
-|  4 | VGG             | vgg16           |   1209.08 |
-|  5 | ConvNeXt        | convnext_tiny   |   1134.46 |
-|  6 | EfficientNet_V1 | efficient_b0    |    893.08 |
-|  7 | ResNetRS        | resnetrs_50     |    787.59 |
-|  8 | EfficientNet_V2 | efficient_b0_v2 |    780    |
-|  9 | DenseNet        | densenet_121    |    700.73 |
-| 10 | ResNet_V1       | resnet50_v1     |    671.24 |
-| 11 | ResNet_V2       | resnet101_v2    |    569.12 |
-| 12 | NASNet          | nasnet_mobile   |    423.78 |
+|    | model_family    | model_variant      |   speedup |
+|---:|:----------------|:-------------------|----------:|
+|  0 | ConvNeXt        | convnext_tiny      |   1134.46 |
+|  1 | DenseNet        | densenet_121       |    700.73 |
+|  2 | EfficientNet_V1 | efficient_b0       |    893.08 |
+|  3 | EfficientNet_V2 | efficient_b0_v2    |    780    |
+|  4 | MobileNet_V1    | mobilenet_v1       |   2543.92 |
+|  5 | MobileNet_V2    | mobilenet_v2       |   1668.39 |
+|  6 | MobileNet_V3    | mobilenet_v3_small |   1600.67 |
+|  7 | NASNet          | nasnet_mobile      |    423.78 |
+|  8 | RegNet_X        | regnetx_016        |   1933.78 |
+|  9 | RegNet_Y        | regnety_002        |   1216.29 |
+| 10 | ResNetRS        | resnetrs_50        |    787.59 |
+| 11 | ResNet_V1       | resnet50_v1        |    671.24 |
+| 12 | ResNet_V2       | resnet101_v2       |    569.12 |
+| 13 | VGG             | vgg16              |   1209.08 |
 
 💡 Absolute speedup here means `throughput_with_xla` - `throughput_without_xla`. Interestingly, for each model family, the smallest model doesn't necessarily always lead to the highest amount of absolute speedup. For example, for RegNetX, RegNetX_16 isn't the smallest variant. Same holds for ResNet101_V2. 
 
 ### What about the relative speedup in percentages?
 
-|    | model_family    | model_variant   |   speedup_percentage |
-|---:|:----------------|:----------------|---------------------:|
-|  0 | RegNet_X        | regnetx_016     |             4452.64  |
-|  1 | NASNet          | nasnet_mobile   |             4368.87  |
-|  2 | ConvNeXt        | convnext_small  |             4188.45  |
-|  3 | MobileNet_V1    | mobilenet_v1    |             3966.82  |
-|  4 | DenseNet        | densenet_121    |             3686.11  |
-|  5 | RegNet_Y        | regnety_004     |             3427.97  |
-|  6 | ResNetRS        | resnetrs_350    |             3300.45  |
-|  7 | MobileNet_V2    | mobilenet_v2    |             2964.45  |
-|  8 | ResNet_V2       | resnet101_v2    |             2844.18  |
-|  9 | EfficientNet_V1 | efficient_b0    |             2841.49  |
-| 10 | EfficientNet_V2 | efficient_b0_v2 |             2761.06  |
-| 11 | ResNet_V1       | resnet152_v1    |             1639.69  |
-| 12 | VGG             | vgg16           |              396.472 |
+|    | model_family    | model_variant      |   speedup_percentage |
+|---:|:----------------|:-------------------|---------------------:|
+|  0 | ConvNeXt        | convnext_small     |             4188.45  |
+|  1 | DenseNet        | densenet_121       |             3686.11  |
+|  2 | EfficientNet_V1 | efficient_b0       |             2841.49  |
+|  3 | EfficientNet_V2 | efficient_b0_v2    |             2761.06  |
+|  4 | MobileNet_V1    | mobilenet_v1       |             3966.82  |
+|  5 | MobileNet_V2    | mobilenet_v2       |             2964.45  |
+|  6 | MobileNet_V3    | mobilenet_v3_small |             3878.53  |
+|  7 | NASNet          | nasnet_mobile      |             4368.87  |
+|  8 | RegNet_X        | regnetx_016        |             4452.64  |
+|  9 | RegNet_Y        | regnety_004        |             3427.97  |
+| 10 | ResNetRS        | resnetrs_350       |             3300.45  |
+| 11 | ResNet_V1       | resnet152_v1       |             1639.69  |
+| 12 | ResNet_V2       | resnet101_v2       |             2844.18  |
+| 13 | VGG             | vgg16              |              396.472 |
 
 💡 Some whopping speedup (**4452.64%**) right there 🤯 Again, smallest variant from a model family doesn't always lead to the highest amount of relative speedup here. 
 
