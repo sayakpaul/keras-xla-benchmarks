@@ -244,7 +244,7 @@ Below are some findings I found interesting.
 
 💡 Here also the similar finding holds as the one presented after Table 1. Mixer-B32, despite being much larger than many models, is faster than the other variants.
 
-> 💡 For numbers on detection models like RetinaNet and YOLOV8, please refer to `keras_cv/analysis.ipynb`.
+> 💡 **Note**: For numbers on detection models like RetinaNet and YOLOV8, please refer to `keras_cv/analysis.ipynb`.
 
 ## Keep in mind 💡
 
