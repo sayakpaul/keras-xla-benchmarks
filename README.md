@@ -71,7 +71,7 @@ docker push spsayakpaul/keras-xla-benchmarks
 
 Each folder (`keras_legacy`, `keras_cv`, or `hub`) contains a Jupyter Notebook called `analysis.ipynb` that provides some exploratory analysis on the results. The `compare.ipynb` notebook presents some basic analysis as well. 
 
-> 💡 **Note**: that for this project, we solely focus on benchmarking the throughput of the models and NOT on their predictive quality. The benchmarks were conducted using full precision (FP32) and NOT in mixed-precision.
+> 💡 **Note**: that for this project, we solely focus on benchmarking the throughput of the models and NOT on their predictive quality. The benchmarks were conducted using full precision (FP32) and NOT in mixed-precision. The numbers shown below pertain to image classification models only. For numbers on detection models (currently limited to YOLOV8 and RetinaNet), refer to `keras_cv/analysis.ipynb`.
 
 Below are some findings I found interesting. 
 
@@ -244,9 +244,7 @@ Below are some findings I found interesting.
 
 💡 Here also the similar finding holds as the one presented after Table 1. Mixer-B32, despite being much larger than many models, is faster than the other variants.
 
-> 💡 **Note**: For numbers on detection models like RetinaNet and YOLOV8, please refer to `keras_cv/analysis.ipynb`.
-
-## Keep in mind 💡
+## Keep in mind 🧠
 
 When you compile a model into XLA, always ensure the outputs of the compiled
 model match with the non-compiled model. Here is an example:
