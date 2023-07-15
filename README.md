@@ -5,6 +5,7 @@ Jump straight to the interesting findings [here](https://github.com/sayakpaul/ke
 
 ## Useful links 🌐
 
+* A [comprehensive report on Weights and Biases](http://wandb.me/keras-xla-benchmark) discussing the benchmarks in details.
 * Learn more about XLA from [here](https://www.tensorflow.org/xla).
 * You can explore the benchmark results here and interact with them:
 [wandb.ai/sayakpaul/keras-xla-benchmarks](https://wandb.ai/sayakpaul/keras-xla-benchmarks). 
@@ -243,6 +244,43 @@ Below are some findings I found interesting.
 
 💡 Here also the similar finding holds as the one presented after Table 1. Mixer-B32, despite being much larger than many models, is faster than the other variants.
 
+### Explore these benchmarks interactively
+
+You are welcome to explore these benchmarks in more details interactively on Weights and Biases via [this report](http://wandb.me/keras-xla-benchmark). 
+
+![keras-xla-benchmarks](https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/keras-xla-benchmarks.gif)
+
+Plus the plots there look extremely cool 🤷
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <img src="https://i.imgur.com/XwmvEF5.png">
+            </td>
+            <td align="center">
+                <img src="https://i.imgur.com/ueO0oJQ.png">
+            </td align="center">
+        </tr>
+        <tr>
+            <td align="center">Log throughput of all models</td>
+            <td align="center">Throughput of all models<br> grouped by model family</td>
+        </tr>
+        <tr>
+            <td align="center">
+                <img src="https://i.imgur.com/PFbgbiZ.png">
+            </td>
+            <td align="center">
+                <img src="https://i.imgur.com/HPORUcA.png">
+            </td>
+        </tr>
+        <tr>
+            <td align="center">Parallel coordinates plot<br>of correlations to XLA</td>
+            <td align="center">Throughput of models<br>grouped by GPU device</td>
+        </tr>
+    </tbody>
+<table>
+
 ## Keep in mind 🧠
 
 When you compile a model into XLA, always ensure the outputs of the compiled
@@ -268,3 +306,6 @@ np.testing.assert_allclose(
 )
 ```
 
+## Acknowledgements
+
+Huge shoutout to [Soumik Rakshit](https://in.linkedin.com/in/soumikrakshit) and [Ayush Thakur](https://in.linkedin.com/in/ayush-thakur-731914149) from the Weights and Biases team for helping a lot with the report. Soumik wrote most of it while Ayush helped with Weave plots. 
