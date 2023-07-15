@@ -248,7 +248,7 @@ Below are some findings I found interesting.
 
 You are welcome to explore these benchmarks in more details interactively on Weights and Biases via [this report](http://wandb.me/keras-xla-benchmark). 
 
-![keras-xla](https://huggingface.co/datasets/sayakpaul/sample-datasets/resolve/main/keras-xla-benchmarks.gif)
+![keras-xla-benchmarks](https://github.com/sayakpaul/keras-xla-benchmarks/assets/22957388/10a1ac24-d8a8-4446-b742-372ac14ae772)
 
 Plus the plots there look extremely cool 🤷
 
