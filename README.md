@@ -10,7 +10,9 @@ Jump straight to the interesting findings [here](https://github.com/sayakpaul/ke
 * You can explore the benchmark results here and interact with them:
 [wandb.ai/sayakpaul/keras-xla-benchmarks](https://wandb.ai/sayakpaul/keras-xla-benchmarks). 
 * The main CSV file collected from the benchmark is available [here](https://huggingface.co/datasets/sayakpaul/keras-xla-benchmarks/blob/main/keras_xla_benchmarks.csv).
-* A [presentation](https://docs.google.com/presentation/d/1HbzkdLnT36H3zFTlActwSj6LnH6yegAS0xywStuhqnI/edit?usp=sharing) on XLA.
+* Presentations I have made on XLA:
+  * [Accelerate your TensorFlow models with XLA](https://docs.google.com/presentation/d/1HbzkdLnT36H3zFTlActwSj6LnH6yegAS0xywStuhqnI/edit?usp=sharing) (focuses on the non-trivial bits needed to be tweaked to make NLP models XLA compatible)
+  * [Making Keras Models go brrr with XLA](https://docs.google.com/presentation/d/1mM8LeQDpOOLWsMQffRhuDuPPFx4TL-cV848EZtCN_8k/edit?usp=sharing) (focuses on the large-scale benchmark study conducted in this repository)
 * A [blog post](https://blog.tensorflow.org/2022/11/how-hugging-face-improved-text-generation-performance-with-xla.html) on how Hugging Face used XLA to speed up the inference latency of its text generation models in 🤗 Transformers.
 
 ## Model pool 🏊‍♂️
